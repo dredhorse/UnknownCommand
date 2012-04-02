@@ -1,0 +1,9 @@
+name: UnknownCommand
+main: org.simiancage.bukkit.UnknownCommand.UnknownCommand
+version: 2.0
+website: http://www.simiancage.org
+Author: DonRedhorse
+commands:
+    uc:
+        description: Will allow a reload of the config
+

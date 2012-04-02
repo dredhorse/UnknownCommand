@@ -1,33 +1,28 @@
-package com.LRFLEW.bukkit.UC;
+package org.simiancage.bukkit.UnknownCommand;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import org.bukkit.ChatColor;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-import org.bukkit.ChatColor;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.event.player.PlayerListener;
+public class PlayerEvents implements Listener {
 
-public class PlayerEvents extends PlayerListener {
-	
 	private final UnknownCommand plugin;
 	private Set<String> commands;
 	private ArrayList<String> UCmsg = null;
 	private Random rand = new Random();
-	
+
 	public PlayerEvents(UnknownCommand instance) {
 		plugin = instance;
 	}
-	
+
 	public void setComs () {
 		Set<String> temp = new HashSet<String>();
 		File file = null;
@@ -57,7 +52,7 @@ public class PlayerEvents extends PlayerListener {
 						temp.add(line);
 					}
 				} catch (IOException e1) {
-					System.out.println("[UC] Cannot read default commands file.  This is a critical error.  " + 
+					System.out.println("[UC] Cannot read default commands file.  This is a critical error.  " +
 							"Message user LRFLEW on bukkit.org if you see this");
 				}
 			} finally {
@@ -100,18 +95,18 @@ public class PlayerEvents extends PlayerListener {
 						temp.add(line);
 					}
 				} catch (IOException e2) {
-					System.out.println("[UC] Cannot read default file.  This is a critical error.  " + 
+					System.out.println("[UC] Cannot read default file.  This is a critical error.  " +
 							"Message user LRFLEW on bukkit.org if you see this");
 				}
 			}
-			
+
 		}
 		this.commands = temp;
 	}
-	
+
 	public void setMsg () {
 		ArrayList<String> temp = new ArrayList<String>();
-		
+
 		File file = null;
 		InputStream dflt = null;
 		InputStreamReader dfltReader = null;
@@ -139,8 +134,7 @@ public class PlayerEvents extends PlayerListener {
 						temp.add(colorize(line));
 					}
 				} catch (IOException e1) {
-					System.out.println("[UC] Cannot read default messages file.  This is a critical error.  " + 
-							"Message user LRFLEW on bukkit.org if you see this");
+					System.out.println("[UC] Cannot read default messages file.  This is a critical error.");
 				}
 			} finally {
 				try {
@@ -182,16 +176,15 @@ public class PlayerEvents extends PlayerListener {
 						temp.add(colorize(line));
 					}
 				} catch (IOException e2) {
-					System.out.println("[UC] Cannot read default messages file.  This is a critical error.  " + 
-							"Message user LRFLEW on bukkit.org if you see this");
+					System.out.println("[UC] Cannot read default messages file.  This is a critical error.");
 				}
 			}
-			
+
 		}
-		
+
 		UCmsg = temp;
 	}
-	
+
 	public String colorize (String string) {
 		return string.
 		replace("\\\\", "\u0000").
@@ -200,8 +193,8 @@ public class PlayerEvents extends PlayerListener {
 		replace("\\", "\u00A7").
 		replace("\u0000", "\\");
 	}
-	
-	@Override
+
+	@EventHandler (priority = EventPriority.MONITOR)
 	public void onPlayerCommandPreprocess (PlayerCommandPreprocessEvent event) {
 		String split = event.getMessage();
 		if (split.charAt(0) == '/') split = split.replaceFirst("/", "");
@@ -217,5 +210,5 @@ public class PlayerEvents extends PlayerListener {
 			event.setCancelled(true);
 		}
 	}
-	
+
 }
